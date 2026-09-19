@@ -2693,7 +2693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0efffaa6f8aa39489df6859c7b0cdb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelChange
-  levelToChange: 4
+  levelToChange: 3
 --- !u!1 &1744864129
 GameObject:
   m_ObjectHideFlags: 0
