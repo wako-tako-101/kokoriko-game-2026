@@ -24,7 +24,7 @@ public class WindGust : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
     }
 
     private void OnEnable()
