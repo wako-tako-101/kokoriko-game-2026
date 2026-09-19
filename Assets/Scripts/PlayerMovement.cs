@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
-    // public Animator animator;
+    public Animator animator;
     public PlayerAudio playerAudio;
     // public PlayerAttack playerAttack;
     public GameManager gm;
@@ -34,6 +34,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool onNoJump;
     private float lastDirection = 1;
+
+    [Header("Death Settings")]
+    public LayerMask deathLayer;
 
     public void FreezePlayer()
     {
@@ -100,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
 
     HandleJump();
     // HandleAttack();
-    // HandleAnimation(moveX, moveY);
+    HandleAnimation(moveX, moveY);
     HandleMovement(moveX, moveY);
     HandleOrientation(moveX);
 
@@ -122,6 +125,7 @@ public class PlayerMovement : MonoBehaviour
             if (allowAudio) playerAudio?.JumpSource?.Play();
         }
 
+        animator.SetBool("isJumping", !isGrounded && !onNoJump);
         // Update isJumping status based on ground checks
         // if (!isGrounded && !onNoJump)
         // {
@@ -158,18 +162,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // void HandleAnimation(float x, float y)
-    // {
-    //     bool isMoving = x != 0 || y != 0;
-    //     // animator.SetBool("isMoving", isMoving);
+    void HandleAnimation(float x, float y)
+    {
+        bool isMoving = Mathf.Abs(x) > 0.01f;
 
-    //     if (isMultiDirectional)
-    //     {
-    //         // animator.SetFloat("MoveHorizontal", x);
-    //         // animator.SetFloat("MoveVertical", y);
-    //         // animator.SetFloat("MoveMagnitude", new Vector2(x, y).magnitude);
-    //     }
-    // }
+        animator.SetBool("isMoving", isMoving);
+    }
 
     // void HandleAttack()
     // {
@@ -209,35 +207,84 @@ public class PlayerMovement : MonoBehaviour
     //     }
     // }
 
-    // public void TimeToDie()
-    // {
-    //     if (!animator.GetBool("isDead"))
-    //         StartCoroutine(DeathRoutine());
-    // }
+    private bool isDying = false;
 
-    // IEnumerator DeathRoutine()
-    // {
-    //     if (gm && gsm)
-    //     {
-    //         animator.SetBool("isDead", true);
-    //         isDisabled = true;
+    public void TimeToDie()
+    {
+        // Prevent the death sequence from starting multiple times
+        if (isDying)
+            return;
 
-    //         yield return new WaitForSeconds(1f);
-    //         yield return StartCoroutine(gsm.FadeOut());
+        StartCoroutine(DeathRoutine());
+    }
 
-    //         gm.Respawn(gameObject);
-    //         yield return StartCoroutine(gsm.FadeIn());
+    IEnumerator DeathRoutine()
+    {
+        isDying = true;
+        isDisabled = true;
 
-    //         GetComponent<PlayerHealth>()?.ResetHealth();
-    //         isDisabled = false;
-    //         animator.SetBool("isDead", false);
-    //     }
-    // }
+        rb.linearVelocity = Vector2.zero;
+
+        if (animator != null)
+        {
+            animator.SetBool("isMoving", false);
+            animator.SetBool("isJumping", false);
+            animator.SetBool("isDead", true);
+        }
+
+    // Continue with your existing death routine...
+
+        // Wait for death animation
+        yield return new WaitForSeconds(1f);
+
+        // Fade out if a scene manager is assigned
+        if (gsm != null)
+        {
+            yield return StartCoroutine(gsm.FadeOut());
+        }
+
+        // Respawn at the starting position
+        if (gm != null)
+        {
+            gm.Respawn(gameObject);
+        }
+
+        // Reset velocity
+        rb.linearVelocity = Vector2.zero;
+
+        // Reset health if the player has a health component
+        GetComponent<PlayerHealth>()?.ResetHealth();
+
+        // Reset animation
+        if (animator != null)
+        {
+            animator.SetBool("isDead", false);
+        }
+
+        // Fade back in
+        if (gsm != null)
+        {
+            yield return StartCoroutine(gsm.FadeIn());
+        }
+
+        isDisabled = false;
+        isDying = false;
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        // Check if the object belongs to the Death layer
+        if ((deathLayer.value & (1 << col.gameObject.layer)) != 0)
+        {
+            TimeToDie();
+            return;
+        }
+
+        // Keep your existing moving platform functionality
         if (col.CompareTag("Platform") && rb.linearVelocity.y < 0)
+        {
             transform.parent = col.transform;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D col)
