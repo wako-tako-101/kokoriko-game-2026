@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Jump
   - 
   - 
   - 
@@ -43,6 +43,12 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 2127785151
+    locked: 0
+  - name: Tileset
+    uniqueID: 4001768803
+    locked: 0
+  - name: Player
+    uniqueID: 624291457
     locked: 0
   m_RenderingLayers:
   - Default
