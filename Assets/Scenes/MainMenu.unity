@@ -710,11 +710,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5fd3c5749aa478fb6929af02ba51ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
-  menuMusic: {fileID: 0}
-  levelMusic: {fileID: 0}
-  gameOverMusic: {fileID: 0}
+  menuMusic: {fileID: 8300000, guid: febd0c7b5387b4578b5ea8363826786a, type: 3}
+  marsMusic: {fileID: 8300000, guid: 46506ce3e89b54c1b946b90dbca7115e, type: 3}
   menuSceneName: MainMenu
-  gameOverSceneName: GameOver
+  tutorialSceneName: Level1Tutorial
+  marsSceneName: Level2Mars
+  endSceneName: EndScene
 --- !u!82 &1540681371
 AudioSource:
   m_ObjectHideFlags: 0

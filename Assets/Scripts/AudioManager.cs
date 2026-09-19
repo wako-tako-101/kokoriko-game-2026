@@ -7,18 +7,19 @@ public class AudioManager : MonoBehaviour
 
     [Header("Music")]
     public AudioClip menuMusic;
-    public AudioClip levelMusic;
-    public AudioClip gameOverMusic;
+    public AudioClip marsMusic;
 
     [Header("Scene Names")]
     public string menuSceneName = "MainMenu";
-    public string gameOverSceneName = "GameOver";
+    public string tutorialSceneName = "Level1Tutorial";
+    public string marsSceneName = "Level2Mars";
+    public string endSceneName = "EndScene";
 
     private AudioSource musicSource;
 
     void Awake()
     {
-        // Make sure only one AudioManager exists
+        // Prevent duplicate AudioManagers
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -27,19 +28,12 @@ public class AudioManager : MonoBehaviour
 
         Instance = this;
 
-        // Keep this object alive when changing scenes
+        // Keep music playing when switching scenes
         DontDestroyOnLoad(gameObject);
 
         musicSource = GetComponent<AudioSource>();
-
         musicSource.loop = true;
         musicSource.playOnAwake = false;
-    }
-
-    void Start()
-    {
-        // Set music for the first scene
-        ChangeMusic(SceneManager.GetActiveScene().name);
     }
 
     void OnEnable()
@@ -52,6 +46,12 @@ public class AudioManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    void Start()
+    {
+        // Play music for the scene where the game starts
+        ChangeMusic(SceneManager.GetActiveScene().name);
+    }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ChangeMusic(scene.name);
@@ -59,32 +59,34 @@ public class AudioManager : MonoBehaviour
 
     void ChangeMusic(string sceneName)
     {
-        AudioClip newMusic;
+        AudioClip newMusic = null;
 
-        if (sceneName == menuSceneName)
+        // Main Menu and Tutorial share the same music
+        if (sceneName == menuSceneName ||
+            sceneName == tutorialSceneName)
         {
             newMusic = menuMusic;
         }
-        else if (sceneName == gameOverSceneName)
+
+        // Mars and End Scene share the same music
+        else if (sceneName == marsSceneName ||
+                 sceneName == endSceneName)
         {
-            newMusic = gameOverMusic;
-        }
-        else
-        {
-            // All other scenes use level music
-            newMusic = levelMusic;
+            newMusic = marsMusic;
         }
 
-        // Don't restart music if it's already playing
+        // No music assigned to this scene
+        if (newMusic == null)
+            return;
+
+        // Don't restart the music if the correct song is already playing
         if (musicSource.clip == newMusic && musicSource.isPlaying)
             return;
 
+        // Switch to the new music
         musicSource.Stop();
         musicSource.clip = newMusic;
-
-        if (newMusic != null)
-        {
-            musicSource.Play();
-        }
+        musicSource.Play();
+        Debug.Log("Music started: " + musicSource.isPlaying);
     }
 }
