@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
-    // public Animator animator;
+    public Animator animator;
     public PlayerAudio playerAudio;
     // public PlayerAttack playerAttack;
     public GameManager gm;
@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
 
     HandleJump();
     // HandleAttack();
-    // HandleAnimation(moveX, moveY);
+    HandleAnimation(moveX, moveY);
     HandleMovement(moveX, moveY);
     HandleOrientation(moveX);
 
@@ -122,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
             if (allowAudio) playerAudio?.JumpSource?.Play();
         }
 
+        animator.SetBool("isJumping", !isGrounded && !onNoJump);
         // Update isJumping status based on ground checks
         // if (!isGrounded && !onNoJump)
         // {
@@ -158,18 +159,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // void HandleAnimation(float x, float y)
-    // {
-    //     bool isMoving = x != 0 || y != 0;
-    //     // animator.SetBool("isMoving", isMoving);
+    void HandleAnimation(float x, float y)
+    {
+        bool isMoving = Mathf.Abs(x) > 0.01f;
 
-    //     if (isMultiDirectional)
-    //     {
-    //         // animator.SetFloat("MoveHorizontal", x);
-    //         // animator.SetFloat("MoveVertical", y);
-    //         // animator.SetFloat("MoveMagnitude", new Vector2(x, y).magnitude);
-    //     }
-    // }
+        animator.SetBool("isMoving", isMoving);
+    }
 
     // void HandleAttack()
     // {
