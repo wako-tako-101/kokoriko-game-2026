@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: df1f60a70f8514860b1f3a441f021324
+guid: 522fd43cd10f5554288335d136b7baf1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2986473382868337711
-    second: vecteezy_a-retro-styled-pixel-art-illustration-of-a-rocketship-with_48123403_0
+      213: 3334738622998220081
+    second: Sign_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: vecteezy_a-retro-styled-pixel-art-illustration-of-a-rocketship-with_48123403_0
+      name: Sign_0
       rect:
         serializedVersion: 2
-        x: 811
-        y: 61
-        width: 2378
-        height: 3939
+        x: 1
+        y: 0
+        width: 30
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f24c60df7b5127920800000000000000
-      internalID: 2986473382868337711
+      spriteID: 13d85920c1f574e20800000000000000
+      internalID: 3334738622998220081
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      vecteezy_a-retro-styled-pixel-art-illustration-of-a-rocketship-with_48123403_0: 2986473382868337711
+      Sign_0: 3334738622998220081
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
